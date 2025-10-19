@@ -12,7 +12,7 @@ public final class Main {
     public static void main(String[] args) {
         boolean run = true; // Termination condition
         Database.create_database();
-        Database.select_table("users");
+        Database.populate_database();
         while(run){
             System.out.println("\nWelcome to E-commerce Systems LTD!\n\n[ PRESS x TO EXIT ]\n\nSign in? (y/n)");
             Scanner sc = new Scanner(System.in);

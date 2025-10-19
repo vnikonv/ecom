@@ -9,15 +9,48 @@ import java.sql.*;
 public final class Database {
 
     public static void create_database() {
-        try {
-            Connection con = DriverManager.getConnection("jdbc:sqlite:ecom.db");
-            String sql = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, email TEXT, password TEXT, balance INTEGER, role TEXT);" +
-                    "PRAGMA foreign_keys = ON;" +
-                    "CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY, name TEXT, price INTEGER, stockQuantity INTEGER, category TEXT);" +
-                    "CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY, customerID INTEGER, prodcts TEXT, FOREIGN KEY customerID REFERENCES users(id))";
-            Statement stmt = con.createStatement();
+        try (Connection con = DriverManager.getConnection("jdbc:sqlite:ecom.db");
+             Statement stmt = con.createStatement()) {
+
+            // Enable foreign key enforcement
+            stmt.execute("PRAGMA foreign_keys = ON");
+
+            // Create users table
+            String sql = """
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY,
+                name TEXT,
+                email TEXT,
+                password TEXT,
+                balance INTEGER,
+                role TEXT
+            );
+            """;
             stmt.executeUpdate(sql);
-            con.close();
+
+            // Create products table
+            sql = """
+            CREATE TABLE IF NOT EXISTS products (
+                id INTEGER PRIMARY KEY,
+                name TEXT,
+                price INTEGER,
+                stockQuantity INTEGER,
+                category TEXT
+            );
+            """;
+            stmt.executeUpdate(sql);
+
+            // Create orders table with correct foreign key syntax
+            sql = """
+            CREATE TABLE IF NOT EXISTS orders (
+                id INTEGER PRIMARY KEY,
+                customerID INTEGER,
+                products TEXT,
+                FOREIGN KEY (customerID) REFERENCES users(id)
+            );
+            """;
+            stmt.executeUpdate(sql);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
