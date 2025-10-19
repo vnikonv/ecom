@@ -1,22 +1,67 @@
 package org.nikon;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+
+/*
+* All database-related logic should be implemented here
+*/
 
 public final class Database {
-    public static void database() {
+
+    public static void create_database() {
         try {
-            Class.forName("org.sqlite.JDBC");
             Connection con = DriverManager.getConnection("jdbc:sqlite:ecom.db");
-            String sql = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, email TEXT, password TEXT, balance INTEGER, role TEXT)";
+            String sql = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, email TEXT, password TEXT, balance INTEGER, role TEXT);" +
+                    "PRAGMA foreign_keys = ON;" +
+                    "CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY, name TEXT, price INTEGER, stockQuantity INTEGER, category TEXT);" +
+                    "CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY, customerID INTEGER, prodcts TEXT, FOREIGN KEY customerID REFERENCES users(id))";
             Statement stmt = con.createStatement();
             stmt.executeUpdate(sql);
             con.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("SQLite JDBC driver not found", e);
+    public static void populate_database() {
+        try {
+            Connection con = DriverManager.getConnection("jdbc:sqlite:ecom.db");
+            String sql = "INSERT INTO users(id, name, email, password, balance, role) VALUES(?, ?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, 1);
+            pstmt.setString(2, "John");
+            pstmt.setString(3, "johne@gmail.com");
+            pstmt.setString(4, "password");
+            pstmt.setInt(5, 100);
+            pstmt.setString(6, "Customer");
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void select_table(String name) {
+        // Validate table name to contain only letters, digits, or underscores
+        if (!name.matches("[A-Za-z0-9_]+")) {
+            throw new IllegalArgumentException("Invalid table name: " + name);
+        }
+
+        String sql = "SELECT * FROM " + name;
+
+        try (Connection con = DriverManager.getConnection("jdbc:sqlite:ecom.db");
+             Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            int columns = rs.getMetaData().getColumnCount();
+
+            while (rs.next()) {
+                for (int i = 1; i <= columns; i++) {
+                    System.out.print(rs.getString(i) + "\t");
+                }
+                System.out.println();
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
