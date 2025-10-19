@@ -1,7 +1,6 @@
 package org.nikon;
 
 public class Product {
-    // id, name, price, stockQuantity, category
     protected Integer id;
     protected String name;
     protected Integer price;

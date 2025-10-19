@@ -1,8 +1,7 @@
 package org.nikon;
 
 public class User {
-    // Should have the following properties: name, email, password, role (customer or employee),
-    // and balance
+    protected Integer id;
     protected String name;
     protected String email;
     protected String password;
@@ -21,11 +20,20 @@ public class User {
 
     protected Integer balance;
 
-    public User(String name, String email, String password, Integer balance) {
+    public User(Integer id, String name, String email, String password, Integer balance) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.balance = balance;
+    }
+
+    public User() {
+        this.id = -1;
+        this.name = "None";
+        this.email = "None";
+        this.password = "None";
+        this.balance = 0;
     }
 
     @Override
