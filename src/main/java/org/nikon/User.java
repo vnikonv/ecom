@@ -38,7 +38,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Name:" + this.name + "\n" + "Email: " + this.email + "\n" + "Password: " + this.password + "\n" + "Role: " + this.role;
+        return "Name:" + this.name + "\nEmail: " + this.email + "\nPassword: " + this.password + "Role: " + this.role;
     }
 
     public Integer getId() {

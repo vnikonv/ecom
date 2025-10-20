@@ -3,21 +3,22 @@ package org.nikon;
 public class Product {
     protected Integer id;
     protected String name;
-    protected Integer price;
+    protected Money price; // In pennies
     protected Integer stockQuantity;
 
     public enum Category {
         Book,
         Electronics,
-        Clothing
+        Clothing,
+        Undefines
     }
 
-    protected Category category;
+    protected Category category = Category.valueOf("Undefined");
 
     public Product(Integer id, String name, Integer price, Integer stockQuantity, String category) {
         this.id = id;
         this.name = name;
-        this.price = price;
+        this.price = new Money(price);
         this.stockQuantity = stockQuantity;
         this.category = Category.valueOf(category);
     }
@@ -25,13 +26,13 @@ public class Product {
     public Product(Integer id, String name, Integer price, Integer stockQuantity) {
         this.id = id;
         this.name = name;
-        this.price = price;
+        this.price = new Money(price);
         this.stockQuantity = stockQuantity;
     }
 
     @Override
     public String toString() {
-        return this.name + " " + this.price + " " + this.stockQuantity + " " + this.category;
+        return "Name: " + this.name + "\nPrice: " + this.price.format() + "\nStock Quantity: " + this.stockQuantity + "\nCategory: " + this.category + "\n";
     }
 
     public Integer getId() {
@@ -47,12 +48,12 @@ public class Product {
         this.name = name;
     }
 
-    public Integer getPrice() {
+    public Money getPrice() {
         return price;
     }
 
     public void setPrice(Integer price) {
-        this.price = price;
+        this.price = new Money(price);
     }
 
     public Integer getStockQuantity() {

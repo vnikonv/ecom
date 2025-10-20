@@ -6,22 +6,24 @@ import java.util.Objects;
 import java.util.Scanner;
 
 /*
-* This is the entry point. It should allow a user to log in to their account or create a new account
-* Any user may also get information on the products available in stock without an account.
+* This is the entry point. It should allow a user to log in to their account or create a new account.
 * There are separate action menus for non-logged-in customers, logged-in customers, and employees.
 */
 
 public final class Main {
     public static void main(String[] args) {
-        
-        boolean run = true; // Termination condition
+
         boolean logged = false;
         Integer user_id = -1;
         User current_user = null;
-        List<User> users = new ArrayList<>();
+
+        List<User> users = new ArrayList<>(); // Implement dumping of list contents into the database and loading contents from the database
+        List<Product> products = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
         users.add(new Employee(1, "admin", "admin", "admin"));
-        
-        while(run){
+
+        run:
+        while(true){
             System.out.println("\n--- Welcome to E-commerce Systems LTD! ---\n\n[ PRESS x TO EXIT ]\n\nEnter l to log in.\n" +
                     "Enter c to create a new account.\nEnter u to log out.");
             System.out.println("Logged in: " + logged);
@@ -29,7 +31,9 @@ public final class Main {
             String answer = sc.nextLine(); // This variable is solely used for user input
 
             switch (answer) {
-                case "x" -> run = false;
+                case "x" -> {
+                    break run;
+                }
                 case "l" -> {
                     System.out.print("Enter your email: ");
                     String email = sc.nextLine();
@@ -89,9 +93,9 @@ public final class Main {
                     answer = sc.nextLine();
                     Customer current_customer = (Customer) current_user;
                     switch (answer) {
-                        case "v" -> System.out.println("View\n");
+                        case "v" -> System.out.println("View\n"); // Should allow creating an order from chosen products
                         case "vf" -> System.out.println("Filter\n");
-                        case "b" -> System.out.println("Your balance is: " + current_customer.getBalance() + "\n");
+                        case "b" -> System.out.println("Your balance is: " + current_customer.getBalance().format() + "\n");
                         case "m" -> System.out.println("Orders\n");
                         case "s" -> {
                             System.out.println("\n --- SETTINGS ---");
@@ -129,7 +133,7 @@ public final class Main {
                 while (!answer.equals("r")) {
                     System.out.println("\n--- EMPLOYEE MENU ---");
                     System.out.println("Enter v to view products.\nEnter vf to view products with a filter.\nEnter c to view all customer accounts.\n" +
-                            "Enter s to open the settings menu.\nEnter r to return to main menu.\n");
+                            "Enter s to open the settings menu.\nEnter r to return to main menu.\n"); // Note to self: allow employees to create new products
                     answer = sc.nextLine();
                     Employee current_employee = (Employee) current_user;
                     switch (answer) {
