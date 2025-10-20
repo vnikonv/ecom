@@ -18,6 +18,11 @@ public class Customer extends User {
         return this.balance;
     }
 
+    public void addBalance(Integer amount) {
+        Integer new_balance = this.balance.value + amount;
+        setBalance(new_balance);
+    }
+
     @Override
     public String toString() {
         return "Name: " + this.name + "\nEmail: " + this.email + "\nPassword: " + this.password + "\nBalance: " + this.balance.format() + "\nRole: " + this.role;

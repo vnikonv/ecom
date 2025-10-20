@@ -40,7 +40,7 @@ public final class Database {
             """;
             stmt.executeUpdate(sql);
 
-            // Create orders table with correct foreign key syntax
+            // Create orders table with foreign key
             sql = """
             CREATE TABLE IF NOT EXISTS orders (
                 id INTEGER PRIMARY KEY,

@@ -10,4 +10,9 @@ public class Money { // pennies by default
     public String format() {
         return String.format("%d.%02d$", this.value / 100, this.value % 100);
     }
+
+    @Override
+    public String toString() {
+        return this.format();
+    }
 }

@@ -18,9 +18,12 @@ public final class Main {
         User current_user = null;
 
         List<User> users = new ArrayList<>(); // Implement dumping of list contents into the database and loading contents from the database
-        List<Product> products = new ArrayList<>();
-        List<Order> orders = new ArrayList<>();
         users.add(new Employee(1, "admin", "admin", "admin"));
+
+        List<Product> products = new ArrayList<>();
+        products.add(new Book(1, "Hamlet", 150, 3));
+
+        List<Order> orders = new ArrayList<>();
 
         run:
         while(true){
@@ -28,7 +31,7 @@ public final class Main {
                     "Enter c to create a new account.\nEnter u to log out.");
             System.out.println("Logged in: " + logged);
             Scanner sc = new Scanner(System.in);
-            String answer = sc.nextLine(); // This variable is solely used for user input
+            String answer = sc.nextLine(); // This variable is solely used for user option input
 
             switch (answer) {
                 case "x" -> {
@@ -78,7 +81,9 @@ public final class Main {
                     System.out.println("Enter v to view products.\nEnter vf to view products with a filter.\nEnter r to return to main menu.\n");
                     answer = sc.nextLine();
                     switch (answer) {
-                        case "v" -> System.out.print("View\n");
+                        case "v" -> {
+                            products.forEach(System.out::println);
+                        }
                         case "vf" -> System.out.println("Filter\n");
                         case "r" -> {
                         }
@@ -89,14 +94,53 @@ public final class Main {
                 while (!answer.equals("r")) {
                     System.out.println("--- CUSTOMER MENU ---");
                     System.out.println("Enter v to view products.\nEnter vf to view products with a filter.\nEnter b to check your balance.\n" +
-                            "Enter m to view your orders.\nEnter s to open the settings menu.\nEnter r to return to main menu.\n");
+                            "Enter o to create a new order.\nEnter m to view your orders.\nEnter s to open the settings menu." +
+                            "\nEnter q to add money to the account.\nEnter r to return to main menu.\n");
                     answer = sc.nextLine();
                     Customer current_customer = (Customer) current_user;
                     switch (answer) {
-                        case "v" -> System.out.println("View\n"); // Should allow creating an order from chosen products
+                        case "v" -> {
+                            products.forEach(System.out::println);
+                        }
                         case "vf" -> System.out.println("Filter\n");
                         case "b" -> System.out.println("Your balance is: " + current_customer.getBalance().format() + "\n");
-                        case "m" -> System.out.println("Orders\n");
+                        case "o" -> {
+                            /*
+                            List<Integer> order_ids = new ArrayList<>();
+                            while (!answer.equals("n")) {
+                                System.out.println("Enter the product id: ");
+                                Integer product_id = sc.nextInt();
+                                products.stream().filter(product -> Objects.equals(product.getId(), product_id)).forEach();
+                                if () {
+                                    if
+                                } else {
+                                    System.out.println("A product with that ID does not exist\n");
+                                }
+                                order_ids.add(product_id);
+                                System.out.println("Create the order? (y/n)");
+                                answer = sc.nextLine();
+                            }
+                             */
+                            Integer order_id = orders.size() + 1;
+                            int calculate_total = products.stream()
+                                    .filter(product -> product.getId() == 1)
+                                    .mapToInt(price -> price.getPrice().value)
+                                    .sum();
+                            orders.add(new Order(order_id, current_customer, products, calculate_total));
+                            current_customer.addBalance(-calculate_total);
+                            System.out.println("Orders created:\n");
+                            orders.stream()
+                                    .filter(order -> Objects.equals(order.getId(), order_id))
+                                    .forEach(System.out::println);
+                            System.out.println();
+                        }
+                        case "m" -> {
+                            System.out.print("Your orders:\n");
+                            orders.stream()
+                                    .filter(order -> Objects.equals(order.getCustomer().getId(), current_customer.getId()))
+                                    .forEach(System.out::println);
+                            System.out.println();
+                        }
                         case "s" -> {
                             System.out.println("\n --- SETTINGS ---");
                             System.out.println("Enter n to change name.\nEnter e to change email.\nEnter p to change password.\nEnter b to go back.");
@@ -124,6 +168,12 @@ public final class Main {
                                 }
                             };
                         }
+                        case "q" -> {
+                            System.out.println("Enter the amount to deposit: ");
+                            Integer amount = Integer.valueOf(sc.nextLine());
+                            current_customer.addBalance(amount);
+                            System.out.println("New balance: " + current_customer.getBalance() + "\n");
+                        }
                         case "r" -> {
                         }
                         default -> System.out.println("Invalid input.");
@@ -133,11 +183,14 @@ public final class Main {
                 while (!answer.equals("r")) {
                     System.out.println("\n--- EMPLOYEE MENU ---");
                     System.out.println("Enter v to view products.\nEnter vf to view products with a filter.\nEnter c to view all customer accounts.\n" +
-                            "Enter s to open the settings menu.\nEnter r to return to main menu.\n"); // Note to self: allow employees to create new products
+                            "Enter s to open the settings menu.\nEnter r to return to main menu.\n");
+                    // Note to self: allow employees to create new products
                     answer = sc.nextLine();
                     Employee current_employee = (Employee) current_user;
                     switch (answer) {
-                        case "v" -> System.out.println("View");
+                        case "v" -> {
+                            products.forEach(System.out::println);
+                        }
                         case "vf" -> System.out.println("Filter");
                         case "c" -> {
                             for (User user : users) {

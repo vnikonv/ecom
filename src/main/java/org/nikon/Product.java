@@ -10,7 +10,7 @@ public class Product {
         Book,
         Electronics,
         Clothing,
-        Undefines
+        Undefined
     }
 
     protected Category category = Category.valueOf("Undefined");

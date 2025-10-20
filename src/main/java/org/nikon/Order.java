@@ -16,7 +16,7 @@ public class Order {
         this.totalPrice = new Money(totalPrice);
     }
 
-    public Integer getOrderId() {
+    public Integer getId() {
         return id;
     }
 
@@ -26,5 +26,11 @@ public class Order {
 
     public List<Product> getProducts() {
         return products;
+    }
+
+    @Override
+    public String toString() {
+        return "Order ID: " + this.id + "\nCustomer Name: " + this.customer.getName() + "\nProducts included:" + this.products +
+        "\nTotal: " + this.totalPrice;
     }
 }
