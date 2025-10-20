@@ -14,22 +14,19 @@ public class User {
 
     protected Role role = Role.Unassigned;
 
-    public Role getRole() {
-        return this.role;
+    public String getRole() {
+        return this.role.name();
     }
 
     public void setRole(String role) {
         this.role = Role.valueOf(role);
     }
 
-    protected Integer balance;
-
-    public User(Integer id, String name, String email, String password, Integer balance) {
+    public User(Integer id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.balance = balance;
     }
 
     public User() {
@@ -37,12 +34,11 @@ public class User {
         this.name = "None";
         this.email = "None";
         this.password = "None";
-        this.balance = 0;
     }
 
     @Override
     public String toString() {
-        return this.name + " " + this.email + " " + this.password + " " + this.balance + " " + this.role;
+        return "Name:" + this.name + "\n" + "Email: " + this.email + "\n" + "Password: " + this.password + "\n" + "Role: " + this.role;
     }
 
     public Integer getId() {
@@ -75,13 +71,5 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Integer getBalance() {
-        return this.balance;
-    }
-
-    public void setBalance(Integer balance) {
-        this.balance = balance;
     }
 }

@@ -63,8 +63,8 @@ public class Product {
         this.stockQuantity = stockQuantity;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategory() {
+        return this.category.name();
     }
 
     public void setCategory(String category) {
