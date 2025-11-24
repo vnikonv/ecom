@@ -1,4 +1,4 @@
-package org.nikon;
+package org.nikon.db;
 
 import java.sql.*;
 
